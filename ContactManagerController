@@ -11,29 +11,29 @@ public class ContactManagerController {
     
     public String wordForSearch{get;set;}
     public List<Contact> foundContacts{get;set;}
-     public List<Contact> results{get;set;}    
+   	public List<Contact> results{get;set;}    
     private final Contact contact;
     //flag, that shows what should be display on screen
     private boolean flag = false;
     
-    public void myInputQuery()
+  	public void myInputQuery()
     {
         if(!String.isEmpty(wordForSearch)) {
-          List<List<SObject>> 
-          founds = 
-              [FIND :wordForSearch IN Name FIELDS RETURNING Contact(FirstName, LastName,
+        	List<List<SObject>> 
+        	founds = 
+            	[FIND :wordForSearch IN Name FIELDS RETURNING Contact(FirstName, LastName,
                                                                  Name, Phone, Email, 
                                                                  Contact_Level__c, Account.Name, 
                                                                  OwnerId, CreatedById, CreatedDate)];
-          results = (List<Contact>)founds[0];
-          System.debug(results);
-          flag = true;
+        	results = (List<Contact>)founds[0];
+        	System.debug(results);
+        	flag = true;
         }
-    }
+  	}
     
     public ContactManagerController(ApexPages.StandardSetController controller) 
     {
-      this.contact = (Contact)controller.getRecord();
+    	this.contact = (Contact)controller.getRecord();
         total_size=[select count() from Contact];    //set the total size in the constructor 
         totalPages = total_size / 10;
         pageNumber = 1;
@@ -43,7 +43,7 @@ public class ContactManagerController {
     {
         if(flag == false) 
         {
-          results = Database.query('SELECT Name, FirstName, LastName, Email, ' + 
+        	results = Database.query('SELECT Name, FirstName, LastName, Email, ' + 
                                   + 'Contact_Level__c, Account.Name, OwnerId, CreatedById, CreatedDate '
                                   + 'FROM Contact ORDER BY ' + sortOrder + ' LIMIT 10');
         }
@@ -88,28 +88,22 @@ public class ContactManagerController {
         this.sortOrder = 'Account.Name';
     }
     
-    public void searchWord() 
-    {
-       List<Contact> results = Database.query('SELECT Name, FirstName, LastName, Email, ' + 
-                                  + 'Contact_Level__c, Account.Name, OwnerId, CreatedById, CreatedDate '
-                                  + 'FROM Contact LIMIT 10');  
-    }
     
     //user clicked the previous button
     public PageReference Previous() 
     { 
-      counter -= list_size;
+    	counter -= list_size;
         if(count==1){
-          results=[SELECT Name, FirstName, LastName, Email,
+        	results=[SELECT Name, FirstName, LastName, Email,
                      Contact_Level__c, Account.Name, OwnerId, CreatedById, CreatedDate 
             FROM Contact LIMIT 10 offset 10 ];
-           count++;
+         	count++;
         }else { 
-           results=[SELECT Name, FirstName, LastName, Email,
+         	results=[SELECT Name, FirstName, LastName, Email,
                      Contact_Level__c, Account.Name, OwnerId, CreatedById, CreatedDate 
             FROM Contact LIMIT 10 ];
         }
-    pageNumber -= 1;        
+		pageNumber -= 1;        
         flag = true;
         return null;
     }
@@ -117,7 +111,7 @@ public class ContactManagerController {
     //user clicked the Next button
     public PageReference Next() 
     {    
-      counter += list_size;
+    	counter += list_size;
         results=[SELECT Name, FirstName, LastName, Email,
                  Contact_Level__c, Account.Name, OwnerId, CreatedById, CreatedDate 
             FROM Contact LIMIT 10 offset 10];
@@ -138,7 +132,7 @@ public class ContactManagerController {
     //this will disable the next and end buttons
     public Boolean getDisabledNext() 
     {            
-      if (counter + list_size < total_size) 
+    	if (counter + list_size < total_size) 
             return false; 
         else 
             return true;
