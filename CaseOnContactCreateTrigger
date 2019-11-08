@@ -1,0 +1,42 @@
+trigger CaseOnContactCreateTrigger on Contact (after insert, after update) {
+   
+    List<Case> caseList = new List<Case>();
+    
+    for(Contact c : Trigger.New) 
+    {   
+         String casePriority;
+        
+        if(c.Contact_Level__c == 'Primary') 
+        {
+            casePriority = 'High';
+        } else if(c.Contact_Level__c == 'Secondary') 
+        {
+            casePriority = 'Medium';
+        } else if(c.Contact_Level__c == 'Tetriary') 
+        {
+            casePriority = 'Low';
+        }
+        
+        if(String.isEmpty(c.AccountId)) 
+        {
+        caseList.add(new Case(
+                    ContactId=c.Id, Status='Working',
+                Origin = 'New Contact', priority = casePriority));
+        }else 
+        {
+            caseList.add(new Case(
+                    ContactId=c.Id, Status='Working', Origin = 'New Contact', 
+                AccountId=c.AccountId, OwnerId=c.OwnerId, priority=casePriority));
+        }
+    }
+    
+    for(integer i = 0; i < caseList.size(); i++)
+    {
+        System.debug(caseList[i] + '\n');
+    }
+    
+    if (caseList.size() > 0) 
+    {
+        insert caseList;
+    }
+}
