@@ -1,0 +1,23 @@
+@isTest
+public class PopupAlertControllerTest {
+    
+    @isTest static void SaveWhenRightData()
+    {
+        boolean isRight = false;
+        Contact contact = new Contact(LastName='testName', Email='testEmail@mail.ru');
+        if(contact.LastName != null && contact.Email != null) {
+            isRight = true;
+        }
+        System.assertEquals(true, isRight);
+    }
+    
+    @isTest static void SaveWhenWrongData() {
+    	boolean isRight = false;
+        Contact contact = new Contact(LastName='testName');
+        if(contact.LastName != null && contact.Email != null) {
+            isRight = true;
+        }
+        System.assertEquals(false, isRight);
+    }
+    
+}
