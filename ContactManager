@@ -84,7 +84,6 @@
                         </apex:commandLink>
                     </apex:facet>
                 </apex:column>
-                
             </apex:pageBlockTable>
             <apex:facet name="footer"><B>&nbsp;&nbsp;&nbsp;&nbsp;
                 Showing Page # {!pageNumber} of {!totalPages}</B></apex:facet>
