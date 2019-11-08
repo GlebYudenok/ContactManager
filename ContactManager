@@ -19,7 +19,7 @@
             			<apex:pageMessages />
                 		<apex:inputField value="{!contact.FirstName}"/>
                 		<apex:inputField value="{!contact.LastName}"/>
-                		<apex:inputField value="{!contact.Email}"/>
+                		<apex:inputField required="true" value="{!contact.Email}"/>
 						<apex:inputField value="{!contact.Contact_Level__c}"/>	
                         <apex:inputField value="{!contact.AccountId}"/>
                 		<apex:commandButton title="Save contact" action="{!Save}" value="Save" styleClass="saveButton"/>
