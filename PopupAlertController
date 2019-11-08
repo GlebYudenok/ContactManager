@@ -5,7 +5,7 @@ public with sharing class PopupAlertController {
     public Contact contact{get;set;}
     
     public PopupAlertController(ApexPages.StandardSetController stdCntrl){
-      contact = new Contact();  
+    	contact = new Contact();	
     }
     
     public void showPopup()
@@ -18,26 +18,18 @@ public with sharing class PopupAlertController {
          displayPopup = false;
     }
     
-    public List<SelectOption> getItems()
-    {
-      List<SelectOption> options = new List<SelectOption>();
-      options.add(new SelectOption('US','US'));
-      options.add(new SelectOption('CANADA','Canada'));
-      options.add(new SelectOption('MEXICO','Mexico')); return options;
-    }
-    
     public PageReference doCancel()
-    {
-      PageReference pageRef = new PageReference(
+  	{
+    	PageReference pageRef = new PageReference(
             'https://ap15.lightning.force.com/lightning/n/Contact_Manager');   
-      pageRef.setRedirect(true);
-        return pageRef;
-    }
+    	pageRef.setRedirect(true);
+      	return pageRef;
+  	}
     
     public PageReference Save(){
-       insert contact;
+   		insert contact;
         
-        if(contact.LastName != null || contact.Email != null) {
+        if(contact.LastName != null && contact.Email != null) {
             PageReference pageRef = new PageReference(
                 'https://ap15.lightning.force.com/lightning/n/Contact_Manager');
             return pageRef;
