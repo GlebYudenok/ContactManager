@@ -1,0 +1,147 @@
+<apex:page standardController="Contact" extensions="ContactManagerController,PopupAlertController" recordSetVar="contacts" >
+    <apex:form >
+  		<apex:pageBlock title="Contacts" id="contacts_list">
+                          
+            <B>Input for search</B> &nbsp;<apex:inputText value="{!wordForSearch}" />   
+            &nbsp;
+            <apex:commandButton value="Search" action="{!myInputQuery}"/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            
+            <apex:commandButton value="New Contact" action="{!showPopup}" rerender="popup"/>
+         			<apex:outputPanel id="popup">
+     					<apex:outputPanel id="popInnerOutputPnl" styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+         
+          			<apex:commandButton title="Cancel" action="{!doCancel}" immediate="true"
+                             image="{!URLFOR($Resource.Buttons_incons, 'buttons/close-icon-png-18.jpg')}" styleClass="closeButton" rerender="popup"> </apex:commandButton>
+					
+                            <apex:outputText style="font-size:30px" value="Creating new Contact.."/>
+            		<apex:pageBlockSection columns="1">
+            			<apex:pageMessages />
+                		<apex:inputField value="{!contact.FirstName}"/>
+                		<apex:inputField value="{!contact.LastName}"/>
+                		<apex:inputField value="{!contact.Email}"/>
+						<apex:inputField value="{!contact.Contact_Level__c}"/>	
+                        <apex:inputField value="{!contact.AccountId}"/>
+                		<apex:commandButton title="Save contact" action="{!Save}" value="Save" styleClass="saveButton"/>
+         			</apex:pageBlockSection>
+                  
+       					</apex:outputPanel>
+       				</apex:outputPanel>
+                        
+            <apex:pageBlockTable value="{!contacts}" var="ct" >
+                <apex:column headerValue="Action">
+                    <apex:outputLink value="{! URLFOR($Action.Contact.Delete, ct.Id) }">
+                		Delete
+                	</apex:outputLink>
+                </apex:column>
+                <apex:column title="Name" >
+                    <apex:outputLink value="/{! ct.Id }">{!ct.Name}</apex:outputLink>
+                		<apex:facet name="header">
+        					<apex:commandLink action="{! sortByName }" 
+            					reRender="contacts_list">Name</apex:commandLink>
+    					</apex:facet>
+                </apex:column>
+                <apex:column title="Created Date" value="{!ct.CreatedDate}">
+                    <apex:facet name="header">
+                    	<apex:commandLink action="{! sortByCreatedDate }"
+                                          reRender="contacts_list">
+                        				Created Date
+                        </apex:commandLink>
+                    </apex:facet>
+                </apex:column>
+                <apex:column value="{! ct.Account.Name }">
+                	<apex:facet name="header">
+                    	<apex:commandLink action="{! sortByAccountName }" reRender="contacts_list">
+                        	Account
+                        </apex:commandLink>
+                    </apex:facet>
+                </apex:column>
+                <apex:column value="{! ct.Email }">
+                    <apex:facet name="header">
+                    	<apex:commandLink action="{! sortByEmail }" reRender="contacts_list">
+                            Email
+                        </apex:commandLink>
+                    </apex:facet>
+                </apex:column>
+               	<apex:column value="{! ct.Contact_Level__c }">
+                    <apex:facet name="header">
+                    	<apex:commandLink action="{! sortByContactLevel }" reRender="contacts_list">
+                        	Contact Level
+                        </apex:commandLink>
+                    </apex:facet>
+                </apex:column>
+                <apex:column value="{! ct.OwnerId }">
+                    <apex:facet name="header">
+                    	<apex:commandLink action="{! sortByOwnerId }" reRender="contacts_list">
+                        	Owner
+                        </apex:commandLink>
+                    </apex:facet>
+                </apex:column>
+            	<apex:column value="{! ct.CreatedById }">
+                    <apex:facet name="header">
+                    	<apex:commandLink action="{! sortByCreatedById }" reRender="contacts_list">
+                            Created id
+                        </apex:commandLink>
+                    </apex:facet>
+                </apex:column>
+                
+            </apex:pageBlockTable>
+            <apex:facet name="footer"><B>&nbsp;&nbsp;&nbsp;&nbsp;
+                Showing Page # {!pageNumber} of {!totalPages}</B></apex:facet>
+        </apex:pageBlock>
+        
+        <apex:pageblock >
+    <apex:pageblockButtons location="Top">
+        <apex:outputPanel id="myButtons">
+            
+            <apex:commandButton value="Previous" action="{!Previous}" disabled="{!disabledPrevious}" reRender="myButtons,contacts_list"/>
+            <apex:commandButton value="Next" action="{!Next}" disabled="{!disabledNext}" reRender="myButtons,contacts_list"/>
+
+        </apex:outputPanel>
+    </apex:pageblockButtons>
+    <apex:pageblockSection >
+        
+    </apex:pageblockSection>
+</apex:pageblock>   
+        
+        
+            
+	<style type="text/css">
+		.customPopup {
+		background-color: white;
+		border-style: solid;
+		border-width: 2px;
+		left: 20%;
+		padding: 10px;
+		position: absolute;
+		z-index: 9999;
+		width: 500px;
+		top: 20%;	
+		}
+
+		.disabledTextBox {
+		background-color: white;
+		border: 1px solid;
+		color: black;
+		cursor: default;
+		width: 90px;
+		display: table;
+		padding: 2px 1px;
+		text-align:right;
+		}
+
+		.closeButton {
+		float: right;
+		width:30px;
+		height:30px;
+		border-radius: 50%;
+		}
+            
+		.saveButton {
+		float: right;
+		width:40px;
+		}
+	</style>
+    	
+    </apex:form>    
+</apex:page>
