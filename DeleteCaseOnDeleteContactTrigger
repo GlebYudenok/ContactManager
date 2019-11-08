@@ -1,0 +1,13 @@
+trigger DeleteCaseOnDeleteContactTrigger on Contact (before delete) {
+	 	//To store parent ids
+    list<id> ContactIds=new list<id>();
+    for(COntact c:trigger.old)
+    {
+        ContactIds.add(c.id);
+    }  
+    //Collecting all child records related to Parent records
+    list<Case> listOfCases=[select id from Case where contactId in :ContactIds];
+    system.debug('listOfCases '+listOfCases);
+    //deleting child records
+    delete listOfCases;
+}
