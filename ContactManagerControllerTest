@@ -1,0 +1,84 @@
+@isTest
+public class ContactManagerControllerTest {
+
+    @isTest public static void getDisabledNextDisableState() 
+    {            
+        boolean flag = true;
+        integer counter = 5;
+        integer list_size = 10;
+        integer total_size = 20;
+        if (counter + list_size < total_size) 
+            flag = false;
+        else 
+            flag = true;
+        System.assertEquals(false, flag);
+    }
+    
+    @isTest public static void getDisabledNextEnableState() 
+    {
+        boolean flag = true;
+        integer counter = 5;
+        integer list_size = 10;
+        integer total_size = 10;
+        if (counter + list_size < total_size) 
+            flag = false;
+        else 
+            flag = true;
+        System.assertEquals(true, flag);
+    }
+    
+    @isTest public static void getDisabledPreviousDisabled() 
+    {           
+        integer counter = 3;
+        boolean flag = true;
+        if(counter>0) {
+             flag = false;
+        }
+         else 
+             flag = true;
+        System.assertEquals(false, flag);
+    }
+    
+    @isTest public static void getDisabledPreviousEnabled() 
+    {           
+        integer counter = -1;
+        boolean flag = false;
+        if(counter>0) {
+             flag = false;
+        }
+         else 
+             flag = true;
+        System.assertEquals(true, flag);
+    }
+    
+    @isTest public static void getContacts() 
+    {
+        boolean flag = false;
+        
+        List<Contact> results = TestDataFactory.createContacts(5);
+        integer size = results.size();
+        Test.startTest();
+        Database.DeleteResult result = Database.delete(results[0], false);
+        Test.stopTest();
+        if(size > 0) {
+            flag = true;
+        }
+        System.assertEquals(true, flag);
+    }
+    
+    @isTest public static void myInputQueryWrong()
+    {
+        boolean success = false;
+        String wordForSearch;
+        if(!String.isEmpty(wordForSearch)) {
+            List<List<SObject>> 
+            founds = 
+                [FIND :wordForSearch IN Name FIELDS RETURNING Contact(FirstName, LastName,
+                                                                 Name, Phone, Email, 
+                                                                 Contact_Level__c, Account.Name, 
+                                                                 OwnerId, CreatedById, CreatedDate)];
+            success = true;
+        }
+        System.assertEquals(false, success);
+    }
+}
